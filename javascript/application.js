@@ -1,52 +1,64 @@
-// console.log("Hello from JavaScript!");
+console.log("Hello from JavaScript!");
 
 // /////////
 // The basic: forEach + using a defined arrow function 
 // /////////
-const students = ["Felix", "Nina", "Ruby", "Dan"];
+const students = ["Jonas", "Mint", "Eri", "Kevin"];
 
-// JS arrow function: () => {}
-// students.forEach((student, index, arr) => {
-//   console.log(`${index + 1} - ${student} is amazing!`);
-//   console.log(arr); // original array students
+// students.forEach((student) => {
+//   console.log(`${student} is amazing!`);
 // });
 
-// const greeting = (name) => {
-//   console.log(`Hello ${name}`);
-// };
+const greeting = (name) => {
+  console.log(`Hello ${name}!`);
+  return "Hello";
+};
 
 // students.forEach(greeting);
+
+// const superStudents = students.map((student) => {
+//   return `Super ${student}`
+// });
+
+const superStudents = students.map(student => `Super ${student}`);
+// console.log(superStudents);
 
 
 // /////////
 // Iterator
 // /////////
-const otherStudents = ["Noah", "Yoshio", "Hiroshi", "Nick"];
+const otherStudents = ["Anamol", "Chae", "Akitaka", "Steven"];
 
-// let's build and append a list to our page
-let lisContent = '';
+let liContent = "";
+
 otherStudents.forEach((student) => {
-  lisContent += `<li class="student" style="text-shadow: goldenrod 0px 0px 8px">${student}</li>`
+  liContent += `<li class="student" style="text-shadow: goldenrod 0px 0px 8px">${student}</li>`
 });
 
-const ulContent = `<ul>${lisContent}</ul>`;
-// console.log(ulContent);
+const ulContent = `<ul>${liContent}</ul>`;
 
-document.body.insertAdjacentHTML("beforeend", ulContent);
+// document.body.insertAdjacentHTML("beforeend", ulContent);
+document.querySelector(".container").insertAdjacentHTML("beforeend", ulContent);
 
-// let's change the look of our unordered list
-const liElements = document.querySelectorAll("ul li.student");
 
-// Ctrl + Cmd + Space -> emoji box on Mac
-liElements.forEach((li) => {
-  li.innerText = `🤓 ${li.innerText}`;
-});
+// DATA ATTRIBUTES
+// ///////////////
 
-// we can use hidden data stored in elements with JS 
-const devs = document.querySelectorAll("ul li.dev");
+const max = document.querySelector("ul#project-z > li.dev");
+// console.log(max);
+
+const ryuya = document.querySelector("li.dev:nth-child(2)");
+// console.log(ryuya);
+
+// console.log(max.dataset);
+// console.log(max.dataset.myPassion);
+
+const devs = document.querySelectorAll(".dev");
 devs.forEach((dev) => {
-  // console.log(dev.dataset);
-  dev.innerText += ` (${dev.dataset.role})`
+  // console.log(dev);
+  // dev is a li HTML element
+  const role = dev.dataset.role;
+  dev.innerText += ` (${role})`;
 });
 
 // /////////
@@ -55,35 +67,47 @@ devs.forEach((dev) => {
 
 // The full JS cycle, including events
 
-// 1. Select elements 
-// (elements the user interacts with, elements that will change)
-const pictures = document.querySelectorAll(".student-img");
-pictures.forEach((picture) => {
-  // 2. Listen to an event, click on the picture
-  picture.addEventListener("click", (event) => {
-    // console.log(event);
-    // console.log(event.currentTarget); // the element that has been clicked
+// 1. select elements, imgs (that will be interacted with, that will be changed)
+const avatars = document.querySelectorAll(".student-img");
+
+avatars.forEach((avatar) => {
+  // 2. Listen to a click on the img
+  avatar.addEventListener("click", (event) => {
+    console.log(event);
+    console.log(event.currentTarget);
     const clickedElement = event.currentTarget;
-    // 3. Change the DOM, add .selected to the picture
+    // 3. Change the DOM, add/remove .selected class
     clickedElement.classList.toggle("selected");
   });
 });
 
+// preventDefault
+
+const clickMe = document.querySelector("#link");
+clickMe.addEventListener("click", (event) => {
+  event.preventDefault();
+  console.log(event);
+});
+
+
 // The full JS cycle, advanced! 💪
 
-let isSelected = false;
-
-// 1. Select elements (selectAll, all the checkboxes)
-const selectAll = document.getElementById("select-all");
+// 1. Select elements, selectAll, checkboxes
+const selectAll = document.querySelector("#select-all");
 const checkboxes = document.querySelectorAll(".form-check-input");
 
-// 2. Listen to an event, click on selectAll
-selectAll.addEventListener("click", (event) => {
+// 2. Listen to a click on selectAll
+let isSelected = false;
+
+const handleSelectAll = (event) => {
   console.log(event);
-  isSelected = !isSelected
-  console.log("selected?", isSelected);
-  // 3. Change the DOM, check all the checkboxes
   const clickedElement = event.currentTarget;
-  clickedElement.innerText = isSelected ? "Unselect all" : "Select all";
-  checkboxes.forEach( checkbox => checkbox.checked = isSelected);
-});
+  // 3. Change the DOM, tick the checkboxes
+  checkboxes.forEach((checkbox) => {
+    checkbox.checked = !isSelected;
+  });
+  clickedElement.innerText = isSelected ? "Select all" : "Remove all";
+  isSelected = !isSelected;
+}
+
+selectAll.addEventListener("click", handleSelectAll);
